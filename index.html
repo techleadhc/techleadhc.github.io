@@ -59,6 +59,10 @@
 			display: block;
 			margin: auto;
             max-height: calc(100vh - 74px);
+            will-change: transform;       /* ✅ Hint to Safari to GPU-accelerate */
+            backface-visibility: hidden;  /* ✅ Best for GPU acceleration        */
+            will-change: transform;       /* ✅ Hints browser to optimize        */
+            transform: translateZ(0);     /* ✅ Alternative GPU trigger          */
 		}
 
 		#home {
@@ -725,9 +729,9 @@
         updateGreetingMessage(); // Set initial greeting message
         greetingIntervalId = setInterval(updateGreetingMessage, 10000); // 10 seconds
 
-    </script>
+        </script>
 
-    <script>
+        <script>
         // RequestAnimationFrame for smoother performance
         let lastScrollY = 0;
         let ticking = false;
@@ -747,21 +751,19 @@
             }
         });
 		
-	</script>
+	    </script>
 
-    <script>
+        <script>
         // Scroll to #home when page loads
         window.onload = function() {
             const homeSection = document.getElementById('home');
             if (homeSection) {
             homeSection.scrollIntoView({ behavior: 'smooth' });
             }
-            
-            // Alternative: Set focus for keyboard/screen reader users
-            homeSection.setAttribute('tabindex', '-1');
+
             homeSection.focus();
         };
-    </script>
+        </script>
 
     </body>
 </html>
