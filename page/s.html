@@ -30,7 +30,7 @@
             border-radius: 12px;
             box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
             /* Neon glow */
-            max-width: 400px;
+            min-width: 250px;
             max-height: 90vh;
             backdrop-filter: blur(10px);
             /* Cyberpunk UI effect */
@@ -147,14 +147,14 @@
         }
 
         .container:hover {
-            animation: neonPulse 1.5s infinite alternate ease-in-out;
+            animation: neonPulse 5s infinite alternate ease-in-out;
         }
     </style>
     </head>
 
     <body onload="setupEnterKeyListener()">
         <div class="container">
-            <form style="min-width:300px" id="cryptoForm">
+            <form id="cryptoForm">
                 <label for="password">⚿</label>
                 <input id="password" type="password" name="password"
                     placeholder="key/1/2" required>
