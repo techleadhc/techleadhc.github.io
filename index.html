@@ -55,6 +55,18 @@
             background: linear-gradient(135deg, rgba(30, 17, 64, 0.8) 0%, rgba(42, 42, 87, 0.9) 50%, rgba(74, 59, 123, 0.8) 100%);
         }
 
+        #workspace-container {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        #workspace-container.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
 		#workspace {
 			display: block;
 			margin: auto;
@@ -288,10 +300,10 @@
             </div>
         </header>
 
-        <main class="pt-16 md:pt-20">
+        <main>
 
             <!-- Image background -->
-            <section id="workspace-container">
+            <section id="workspace-container" class="pt-16 md:pt-20">
                 <svg id="workspace" viewBox="0 0 800 600" style="width: 100%; max-height: 100vh;">
                     <image
                         xlink:href="https://cdnb.artstation.com/p/assets/images/images/058/670/031/original/josue-pimenta-retro-computer.gif?1674689993"
@@ -788,27 +800,6 @@
         </script>
 
         <script>
-            const bg = document.querySelector('#workspace-container');
-            bg.style.willChange = 'transform'; // Pre-optimize
-
-            let lastScrollY = 0;
-            let ticking = false;
-
-            function updateBgPosition() {
-                bg.style.transform = `translate3d(0, ${lastScrollY * 0.3}px, 0)`;
-                ticking = false;
-            }
-
-            window.addEventListener('scroll', () => {
-            lastScrollY = window.scrollY;
-            if (!ticking) {
-                requestAnimationFrame(updateBgPosition);
-                ticking = true;
-            }
-            }, { passive: true }); // Improves scrolling performance
-	    </script>
-
-        <script>
             // Scroll to #home when page loads
             window.onload = function() {
                 const homeSection = document.getElementById('home');
@@ -818,6 +809,68 @@
 
                 homeSection.focus();
             };
+        </script>
+
+        <script>
+            const SECRET_WORD = "console";
+            const hiddenElement = document.getElementById("workspace-container");
+
+            // Track typed characters
+            let typedLetters = [];
+
+            // Listen for key presses
+            document.addEventListener("keydown", (e) => {
+            // Ignore modifier keys (Shift, Ctrl, Alt, etc.)
+            if (e.key.length === 1 || e.key === "Backspace") {
+                if (e.key === "Backspace") {
+                // Remove last letter if Backspace is pressed
+                typedLetters.pop();
+                } else {
+                // Add typed letter to the array
+                typedLetters.push(e.key.toLowerCase());
+                }
+
+                // Check if the last N letters match SECRET_WORD
+                const typedWord = typedLetters.slice(-SECRET_WORD.length).join("");
+                if (typedWord === SECRET_WORD) {
+                    // Unhide the element
+                    hiddenElement.style.display = "block";
+
+                    setTimeout(() => {
+                        hiddenElement.classList.add("show"); // Start transition after delay
+                        setTimeout(() => {
+                            hiddenElement.style.transition = "none"; // Remove transition after animation finishes
+                        }, 1000); // Delay should match the CSS transition duration
+                    }, 300); // Initial delay before showing
+
+                    console.log("Console revealed~");
+
+                    // add parallax effect
+                    const bg = document.querySelector('#workspace-container');
+                    bg.style.willChange = 'transform'; // Pre-optimize
+
+                    let lastScrollY = 0;
+                    let ticking = false;
+
+                    function updateBgPosition() {
+                        bg.style.transform = `translate3d(0, ${lastScrollY * 0.3}px, 0)`;
+                        ticking = false;
+                    }
+
+                    window.addEventListener('scroll', () => {
+                    lastScrollY = window.scrollY;
+                    if (!ticking) {
+                        requestAnimationFrame(updateBgPosition);
+                        ticking = true;
+                    }
+                    }, { passive: true }); // Improves scrolling performance
+
+                    
+                    // Reset typed letters (optional)
+                    typedLetters = [];
+                }
+            }
+            });
         </script>
 
     </body>
